@@ -37,17 +37,27 @@ const cardTask = (task) => {
 export const createCardTasks = () => {
   const spinner = document.querySelector("#spinner");
   spinner.style.display = "flex";
+  cardContainer.innerHTML = "";
 
   getTasks()
     .then((tasks) => {
       spinner.style.display = "none";
-      tasks.forEach((task) => {
-        const cardElement = cardTask(task);
-        cardContainer.appendChild(cardElement);
-      });
+
+      if (tasks.length === 0) {
+        const noTasksMessage = document.createElement("p");
+        noTasksMessage.className =
+          "text-center text-gray-700 font-semibold mt-4";
+        noTasksMessage.textContent = "No hay tareas para mostrar";
+        cardContainer.appendChild(noTasksMessage);
+      } else {
+        tasks.forEach((task) => {
+          const cardElement = cardTask(task);
+          cardContainer.appendChild(cardElement);
+        });
+      }
     })
     .catch((error) => {
       spinner.style.display = "none";
-      console.warn(`Error al obtener las tasks ${error}`);
+      console.warn(`Error al obtener las tareas: ${error}`);
     });
 };
