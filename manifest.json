@@ -10,10 +10,18 @@
   "id": "/TaskManager/",
   "background_color": "#ffffff",
   "theme_color": "#3b82f6",
+  "icons": [
+    {
+      "src": "assets/icons/tarea.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
   "screenshots": [
     {
       "src": "assets/screenshots/screenshot_1.png",
-      "sizes": "482x973",
+      "sizes": "482x937",
       "type": "image/png",
       "form_factor": "wide"
     },
