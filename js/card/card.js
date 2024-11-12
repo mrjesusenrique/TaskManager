@@ -4,7 +4,7 @@ import states from "../utils/states.js";
 const cardContainer = document.querySelector("#task-container");
 
 const cardTask = (task) => {
-  const { titulo, fechaCreacion, estado } = task;
+  const { titulo, fechaCreacion, estado, fechaConclusion } = task;
 
   const card = document.createElement("article");
   card.className =
@@ -23,7 +23,12 @@ const cardTask = (task) => {
 
   const taskDate = document.createElement("p");
   taskDate.className = "text-sm text-gray-500";
-  taskDate.textContent = fechaCreacion;
+
+  if (estado === states.finalizado) {
+    taskDate.textContent = fechaConclusion;
+  } else {
+    taskDate.textContent = fechaCreacion;
+  }
 
   const taskStatus = document.createElement("p");
   taskStatus.className = "text-sm font-semibold";
@@ -32,9 +37,9 @@ const cardTask = (task) => {
   if (estado === states.pendiente) {
     taskStatus.classList.add("text-green-600");
   } else if (estado === states.enCurso) {
-    taskStatus.classList.add("text-yellow-600", "opacity-75");
+    taskStatus.classList.add("text-yellow-600");
   } else if (estado === states.finalizado) {
-    taskStatus.classList.add("text-gray-500");
+    taskStatus.classList.add("text-gray-600");
   }
 
   infoContainer.appendChild(taskTitle);
@@ -48,6 +53,13 @@ const cardTask = (task) => {
 
   card.appendChild(infoContainer);
   card.appendChild(playButton);
+
+  if (estado === states.pendiente || estado === states.enCurso) {
+    card.addEventListener("click", () => {
+      localStorage.setItem("selectedTask", JSON.stringify(task));
+      window.location.href = "edit.html";
+    });
+  }
 
   return card;
 };
@@ -63,7 +75,16 @@ export const createCardTasks = () => {
 
       tasks.sort((a, b) => {
         const statusOrder = { Pendiente: 1, "En curso": 1, Finalizado: 2 };
-        return statusOrder[a.estado] - statusOrder[b.estado];
+        const statusComparison = statusOrder[a.estado] - statusOrder[b.estado];
+
+        if (statusComparison !== 0) {
+          return statusComparison;
+        }
+
+        const dateA = new Date(a.fechaCreacion);
+        const dateB = new Date(b.fechaCreacion);
+
+        return dateB - dateA;
       });
 
       if (tasks.length === 0) {

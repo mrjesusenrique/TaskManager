@@ -40,3 +40,24 @@ export const createTask = async (newTask) => {
     console.warn(`Hubo un problema con la solicitud Fetch: ${error}`);
   }
 };
+
+export const updateTask = async (updatedTask, taskId) => {
+  try {
+    const response = await fetch(`${URL}/${taskId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedTask),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error HTTP: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.warn(`Hubo un problema con la solicitud Fetch: ${error}`);
+  }
+};
