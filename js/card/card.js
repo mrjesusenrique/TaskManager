@@ -3,8 +3,51 @@ import states from "../utils/states.js";
 
 const cardContainer = document.querySelector("#task-container");
 
+const speakText = (text, button) => {
+  if (!window.speechSynthesis) {
+    console.warn(
+      "La API SpeechSynthesis no está disponible en este navegador."
+    );
+    return;
+  }
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "es-AR";
+
+  let voices = speechSynthesis.getVoices();
+
+  if (voices.length === 0) {
+    speechSynthesis.onvoiceschanged = () => {
+      voices = speechSynthesis.getVoices();
+      if (voices.length > 0) {
+        utterance.voice = voices.find((voice) => voice.lang === "es-AR");
+        speechSynthesis.speak(utterance);
+      }
+    };
+  } else {
+    utterance.voice = voices.find((voice) => voice.lang === "es-AR");
+    speechSynthesis.speak(utterance);
+  }
+
+  utterance.onstart = () => {
+    console.log("Reproduciendo texto...");
+    button.classList.add("bg-green-500");
+    button.classList.remove("bg-blue-500");
+  };
+
+  utterance.onend = () => {
+    console.log("Reproducción finalizada.");
+    button.classList.remove("bg-green-500");
+    button.classList.add("bg-blue-500");
+  };
+
+  utterance.onerror = (event) => {
+    console.error("Error al intentar reproducir el texto:", event.error);
+  };
+};
+
 const cardTask = (task) => {
-  const { titulo, fechaCreacion, estado, fechaConclusion } = task;
+  const { titulo, fechaCreacion, estado, fechaConclusion, descripcion } = task;
 
   const card = document.createElement("article");
   card.className =
@@ -50,6 +93,13 @@ const cardTask = (task) => {
   playButton.className =
     "bg-blue-500 text-white p-2 rounded-full focus:outline-none hover:bg-blue-600 transition";
   playButton.innerHTML = "▶";
+
+  playButton.addEventListener("click", (event) => {
+    event.stopPropagation();
+
+    const taskText = `Título: ${titulo}. Descripcion: ${descripcion}. Creada en: ${fechaCreacion}. Estado: ${estado}.`;
+    speakText(taskText, playButton);
+  });
 
   card.appendChild(infoContainer);
   card.appendChild(playButton);
