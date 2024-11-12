@@ -1,13 +1,18 @@
 import { getTasks } from "../api/api.js";
+import states from "../utils/states.js";
 
 const cardContainer = document.querySelector("#task-container");
 
 const cardTask = (task) => {
-  const { titulo, fechaCreacion } = task;
+  const { titulo, fechaCreacion, estado } = task;
 
   const card = document.createElement("article");
   card.className =
     "flex items-center justify-between p-4 mb-4 bg-white shadow-md rounded-lg border border-gray-200";
+
+  if (estado === states.finalizado) {
+    card.classList.add("opacity-50", "pointer-events-none");
+  }
 
   const infoContainer = document.createElement("div");
   infoContainer.className = "flex flex-col";
@@ -20,8 +25,21 @@ const cardTask = (task) => {
   taskDate.className = "text-sm text-gray-500";
   taskDate.textContent = fechaCreacion;
 
+  const taskStatus = document.createElement("p");
+  taskStatus.className = "text-sm font-semibold";
+  taskStatus.textContent = `Estado: ${estado}`;
+
+  if (estado === states.pendiente) {
+    taskStatus.classList.add("text-green-600");
+  } else if (estado === states.enCurso) {
+    taskStatus.classList.add("text-yellow-600", "opacity-75");
+  } else if (estado === states.finalizado) {
+    taskStatus.classList.add("text-gray-500");
+  }
+
   infoContainer.appendChild(taskTitle);
   infoContainer.appendChild(taskDate);
+  infoContainer.appendChild(taskStatus);
 
   const playButton = document.createElement("button");
   playButton.className =
@@ -42,6 +60,11 @@ export const createCardTasks = () => {
   getTasks()
     .then((tasks) => {
       spinner.style.display = "none";
+
+      tasks.sort((a, b) => {
+        const statusOrder = { Pendiente: 1, "En curso": 1, Finalizado: 2 };
+        return statusOrder[a.estado] - statusOrder[b.estado];
+      });
 
       if (tasks.length === 0) {
         const noTasksMessage = document.createElement("p");
