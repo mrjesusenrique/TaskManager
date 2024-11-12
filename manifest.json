@@ -1,0 +1,35 @@
+{
+  "name": "Task Manager",
+  "short_name": "TaskMg",
+  "version": "1.0.0",
+  "description": "Una aplicación para llevar un orden de tus tareas cotidianas",
+  "start_url": "/TaskManager/",
+  "scope": "/TaskManager/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "id": "/TaskManager/",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "icons": [
+    {
+      "src": "assets/icons/tarea.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/screenshots/screenshot_1.png",
+      "sizes": "482x937",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "assets/screenshots/screenshot_2.png",
+      "sizes": "471x928",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
+}

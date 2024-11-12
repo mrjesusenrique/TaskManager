@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="manifest" href="manifest.json">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/compressorjs@1.1.1/dist/compressor.min.js"></script>
+  <title>Task Manager</title>
+</head>
+
+<body className="bg-gray-100">
+  <header class="flex items-center p-4 bg-gray-800 text-white">
+    <button id="menu-btn" class="text-2xl mr-4 focus:outline-none">
+      ☰
+    </button>
+    <h1 class="text-xl font-semibold">Task Manager</h1>
+  </header>
+  <nav id="menu" class="hidden bg-gray-800 text-white absolute top-16 left-0 w-48 z-50">
+    <ul>
+      <li><a href="createTask.html" class="block p-4 hover:bg-gray-700">Nueva task</a></li>
+      <li><a href="config.html" class="block p-4 hover:bg-gray-700">Configuración</a></li>
+    </ul>
+  </nav>
+  <main class="p-4">
+    <section id="task-container">
+      <div id="spinner" class="w-full flex justify-center mt-5">
+        <div class="spinner-model"></div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="./js/index.js"></script>
+</body>
+
+</html>
