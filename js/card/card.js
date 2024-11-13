@@ -11,8 +11,14 @@ const speakText = (text, button) => {
     return;
   }
 
+  const configuracionAudio = JSON.parse(
+    localStorage.getItem("configuracionAudio")
+  );
+  const language = configuracionAudio?.idioma || "es-AR";
+  const speed = configuracionAudio?.velocidad || 0;
+
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "es-AR";
+  utterance.lang = language;
 
   let voices = speechSynthesis.getVoices();
 
@@ -20,12 +26,14 @@ const speakText = (text, button) => {
     speechSynthesis.onvoiceschanged = () => {
       voices = speechSynthesis.getVoices();
       if (voices.length > 0) {
-        utterance.voice = voices.find((voice) => voice.lang === "es-AR");
+        utterance.voice = voices.find((voice) => voice.lang === language);
+        utterance.rate = speed;
         speechSynthesis.speak(utterance);
       }
     };
   } else {
-    utterance.voice = voices.find((voice) => voice.lang === "es-AR");
+    utterance.voice = voices.find((voice) => voice.lang === language);
+    utterance.rate = speed;
     speechSynthesis.speak(utterance);
   }
 
